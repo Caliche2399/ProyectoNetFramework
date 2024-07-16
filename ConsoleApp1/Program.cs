@@ -53,7 +53,7 @@ identityBuilder.AddEntityFrameworkStores<AppDbContext>();
 identityBuilder.AddSignInManager<SignInManager<Usuario>>();
 builder.Services.AddSingleton<ISystemClock, SystemClock>();
 builder.Services.AddScoped<IJwtGenerador, JwtGenerador>();
-builder.Services.AddScoped<IUsuarioSesion, IUsuarioSesion>();
+builder.Services.AddScoped<IUsuarioSesion, UsuarioSesion>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Mi palabra secreta"));
@@ -84,7 +84,26 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ManagerMiddleware>();
 
 app.UseAuthentication();
+app.UseCors("corsapp");
 app.UseAuthorization();
 app.MapControllers();
+
+using (var ambiente = app.Services.CreateScope())
+{
+    var services = ambiente.ServiceProvider;
+
+    try
+    {
+        var userManager = services.GetRequiredService <UserManager<Usuario>>();
+        var context = services.GetRequiredService<AppDbContext>();
+        await context.Database.MigrateAsync();
+        await LoadDatabase.InsertarData(context, userManager);
+    }
+    catch (Exception e)
+    {
+        var loggin = services.GetRequiredService < ILogger<Program>>();
+        loggin.LogError(e,"Ocurrio un error en la migracion");
+    }
+}
 
 app.Run();

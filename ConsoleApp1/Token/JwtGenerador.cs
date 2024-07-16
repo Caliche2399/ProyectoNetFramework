@@ -18,7 +18,7 @@ public class JwtGenerador : IJwtGenerador
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("Mi palabra secreta"));
-        var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var credenciales = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
         var tokenDescripcion = new SecurityTokenDescriptor
         {

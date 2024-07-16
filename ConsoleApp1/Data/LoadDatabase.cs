@@ -18,7 +18,7 @@ public class LoadDatabase
                 Telefono = "30318788"
             };
 
-           await usuarioManager.CreateAsync(usuario, "PasswordCarlosaguilar123*");
+           await usuarioManager.CreateAsync(usuario, "PasswordCalichinPaniagua123$");
         }
 
         if (!context.Inmuebles!.Any())

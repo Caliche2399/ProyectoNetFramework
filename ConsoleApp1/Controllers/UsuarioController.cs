@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ConsoleApp1.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/usuario")]
 [ApiController]
 public class UsuarioController : ControllerBase
 {
